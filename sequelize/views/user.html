@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>User Registration</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            max-width: 800px;
+            margin: 20px 0;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        form {
+            margin: 20px 0;
+        }
+        input {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <h2>User Registration</h2>
+    <form action="/users" method="post">
+        <input type="text" name="name" placeholder="Name" required><br>
+        <input type="number" name="age" placeholder="Age" required><br>
+        <input type="checkbox" name="married"> Married<br>
+        <button type="submit">Add</button>
+    </form>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Age</th>
+                <th>Married</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.name }}</td>
+                <td>{{ user.age }}</td>
+                <td>{% if user.married %}Y{% else %}N{% endif %}</td>
+                <td>
+                    <button onclick="modifyUser('{{ user.id }}')">modify</button>
+                    <a href="/users/delete/{{ user.id }}"><button type="button">delete</button></a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <script>
+        function modifyUser(id) {
+            const name = prompt('Enter new name:');
+            if (!name) return;
+            
+            const age = prompt('Enter new age:');
+            if (!age || isNaN(age)) return;
+            
+            const married = confirm('Married?');
+            
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/users/update/' + id;
+            
+            const nameInput = document.createElement('input');
+            nameInput.type = 'hidden';
+            nameInput.name = 'name';
+            nameInput.value = name;
+            
+            const ageInput = document.createElement('input');
+            ageInput.type = 'hidden';
+            ageInput.name = 'age';
+            ageInput.value = age;
+            
+            const marriedInput = document.createElement('input');
+            marriedInput.type = 'hidden';
+            marriedInput.name = 'married';
+            marriedInput.value = married ? 'on' : 'off';
+            
+            form.appendChild(nameInput);
+            form.appendChild(ageInput);
+            form.appendChild(marriedInput);
+            
+            document.body.appendChild(form);
+            form.submit();
+        }
+    </script>
+</body>
+</html> 
