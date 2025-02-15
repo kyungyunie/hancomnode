@@ -1,7 +1,7 @@
 {
   "development": {
-    "username": "masterchain",
-    "password": "mastercomes",
+    "username": "masterchain1",
+    "password": "*********",
     "database": "nodejs",
     "host": "m95.cq1ymn0qmmdx.ap-northeast-2.rds.amazonaws.com",
     "dialect": "mysql"
