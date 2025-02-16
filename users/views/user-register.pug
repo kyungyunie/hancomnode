@@ -1,0 +1,19 @@
+doctype html
+html
+  head
+    title Register User
+  body
+    h1 Register User
+    form(action='/users' method='POST')
+      div
+        label(for='name') Name: 
+        input#name(name='name' required)
+      div
+        label(for='age') Age: 
+        input#age(type='number' name='age' required)
+      div
+        label(for='married') Married: 
+        input#married(type='checkbox' name='married')
+      div
+        button(type='submit') Save
+        a(href='/users') Cancel 

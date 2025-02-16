@@ -1,0 +1,19 @@
+doctype html
+html
+  head
+    title Edit User
+  body
+    h1 Edit User
+    form(action=`/users/edit/${user.id}` method='POST')
+      div
+        label(for='name') Name: 
+        input#name(name='name' value=user.name required)
+      div
+        label(for='age') Age: 
+        input#age(type='number' name='age' value=user.age required)
+      div
+        label(for='married') Married: 
+        input#married(type='checkbox' name='married' checked=user.married)
+      div
+        button(type='submit') Save
+        a(href='/users') Cancel 

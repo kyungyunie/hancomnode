@@ -7,29 +7,21 @@ if (process.platform === 'win32') {
 const express = require('express');
 const path = require('path');
 const morgan = require('morgan');
-const nunjucks = require('nunjucks');
 const pool = require('./models'); // index.js의 pool을 가져옴
-
-const indexRouter = require('./routes');
 const usersRouter = require('./routes/users');
 
 const app = express();
-app.set('port', process.env.PORT || 3002);
-app.set('view engine', 'html');
-nunjucks.configure('views', {
-  express: app,
-  watch: true,
-});
+const PORT = process.env.PORT || 3003;  // 3002에서 다른 포트로 변경
+
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'views'));
+app.set('pool', pool);
 
 app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// pool을 라우터에서 사용할 수 있도록 설정
-app.set('pool', pool);
-
-app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
 app.use((req, res, next) => {
@@ -38,22 +30,30 @@ app.use((req, res, next) => {
   next(error);
 });
 
+// Error handler
 app.use((err, req, res, next) => {
-  res.locals.message = err.message;
-  res.locals.error = process.env.NODE_ENV !== 'production' ? err : {};
-  res.status(err.status || 500);
-  res.render('error');
+  res.status(err.status || 500).render('error', {
+    message: err.message,
+    error: process.env.NODE_ENV !== 'production' ? err : {}
+  });
 });
 
 // 데이터베이스 연결 테스트
 pool.query('SELECT 1')
   .then(() => {
-    console.log('데이터베이스 연결 성공');
+    console.log('Database connection successful');
   })
   .catch((err) => {
-    console.error('데이터베이스 연결 에러:', err);
+    console.error('Database connection error:', err);
   });
 
-app.listen(app.get('port'), () => {
-  console.log(app.get('port'), '번 포트에서 대기 중');
+const server = app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
+
+server.on('error', (error) => {
+    if (error.code === 'EADDRINUSE') {
+        console.log(`Port ${PORT} is already in use. Please try another port.`);
+        process.exit(1);
+    }
 });

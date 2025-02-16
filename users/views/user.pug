@@ -1,0 +1,30 @@
+doctype html
+html
+  head
+    title User List
+    style.
+      table { border-collapse: collapse; }
+      td, th { border: 1px solid black; padding: 5px; }
+      .actions { display: flex; gap: 5px; }
+      .actions a { text-decoration: none; padding: 2px 5px; }
+      .edit { background: #4CAF50; color: white; }
+      .delete { background: #f44336; color: white; }
+  body
+    h1 User List
+    a(href='/users/reg') New User
+    table
+      tr
+        th ID
+        th Name
+        th Age
+        th Married
+        th Actions
+      each user in users || []
+        tr
+          td= user.id
+          td= user.name
+          td= user.age
+          td= user.married ? 'Yes' : 'No'
+          td.actions
+            a.edit(href=`/users/edit/${user.id}`) Edit
+            a.delete(href=`/users/delete/${user.id}` onclick="return confirm('Are you sure?')") Delete 
