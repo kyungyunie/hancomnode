@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>User List</title>
+  <style>
+    table { border: 1px solid black; border-collapse: collapse; }
+    table th, table td { border: 1px solid black; padding: 4px; }
+  </style>
+</head>
+<body>
+  <div>
+    <form id="user-form">
+      <fieldset>
+        <legend>New User</legend>
+        <div><input id="username" type="text" placeholder="name"></div>
+        <div><input id="age" type="number" placeholder="age"></div>
+        <div><input id="married" type="checkbox"><label for="married">Married</label></div>
+        <button type="submit">Submit</button>
+      </fieldset>
+    </form>
+  </div>
+  <br>
+  <table id="user-list">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Age</th>
+        <th>Married</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+    {%- if users and users.length -%}
+      {%- for user in users -%}
+      <tr>
+        <td>{{ user._id }}</td>
+        <td>{{ user.name }}</td>
+        <td>{{ user.age }}</td>
+        <td>{% if user.married %}Yes{% else %}No{% endif %}</td>
+        <td>
+          <button onclick="editUser('{{ user._id }}')">Edit</button>
+          <button onclick="deleteUser('{{ user._id }}')">Delete</button>
+        </td>
+      </tr>
+      {%- endfor -%}
+    {%- else -%}
+      <tr>
+        <td colspan="5">No users found</td>
+      </tr>
+    {%- endif -%}
+    </tbody>
+  </table>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="/mongoose.js"></script>
+</body>
+</html> 
