@@ -1,9 +1,9 @@
 {
   "development": {
-    "username": "masterchain",
-    "password": "mastercomes",
-    "database": "nodebird",
-    "host": "m95.cq1ymn0qmmdx.ap-northeast-2.rds.amazonaws.com",
+    "username": "root",
+    "password": "nodejsbook",
+    "database": "nodebird_test",
+    "host": "127.0.0.1",
     "dialect": "mysql"
   },
   "test": {

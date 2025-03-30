@@ -1,9 +1,9 @@
 {
   "development": {
-    "username": "masterchain",
-    "password": "mastercomes",
+    "username": "root",
+    "password": "0000",
     "database": "nodejs",
-    "host": "m95.cq1ymn0qmmdx.ap-northeast-2.rds.amazonaws.com",
+    "host": "localhost",
     "dialect": "mysql"
   }
 } 
