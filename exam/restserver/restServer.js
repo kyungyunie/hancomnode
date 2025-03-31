@@ -25,6 +25,8 @@ http.createServer(async (req, res) => {
         return res.end(data);
       } catch (err) {
         // 주소에 해당하는 라우트를 못 찾았다는 404 Not Found error 발생
+        res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
+        return res.end('요청하신 페이지를 찾을 수 없습니다.');
       }
     } else if (req.method === 'POST') {
       if (req.url === '/user') {

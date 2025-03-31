@@ -1,4 +1,4 @@
-const myURL = new URL('http://15.164.232.204/tank.html?page=3&limit=10&category=nodejs&category=javascript');
+const myURL = new URL('http://3.35.233.100/index.html?page=3&limit=10&category=nodejs&category=javascript');
 console.log('searchParams:', myURL.searchParams);
 console.log('searchParams.getAll():', myURL.searchParams.getAll('category'));
 console.log('searchParams.get():', myURL.searchParams.get('limit'));

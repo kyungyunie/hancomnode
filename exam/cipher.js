@@ -5,7 +5,7 @@ const key = 'abcdefghijklmnopqrstuvwxyz123456';
 const iv = '1234567890123456';
 
 const cipher = crypto.createCipheriv(algorithm, key, iv);
-let result = cipher.update('tommy', 'utf8', 'base64');
+let result = cipher.update('김태현', 'utf8', 'base64');
 result += cipher.final('base64');
 console.log('암호화:', result);
 
