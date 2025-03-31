@@ -1,4 +1,4 @@
-// »ç¿ëÀÚ ·Îµù
+// ì‚¬ìš©ì ë¡œë”©
 async function getUser(id) {
   try {
     const res = await axios.get(`/users/${id}`);
@@ -9,17 +9,17 @@ async function getUser(id) {
   }
 }
 
-// »ç¿ëÀÚ µî·Ï
+// ì‚¬ìš©ì ë“±ë¡
 document.getElementById('user-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const name = e.target.username.value;
   const age = e.target.age.value;
   const married = e.target.married.checked;
   if (!name) {
-    return alert('ÀÌ¸§À» ÀÔ·ÂÇÏ¼¼¿ä');
+    return alert('ì´ë¦„ì„ ì…ë ¥í•˜ì„¸ìš”');
   }
   if (!age) {
-    return alert('³ªÀÌ¸¦ ÀÔ·ÂÇÏ¼¼¿ä');
+    return alert('ë‚˜ì´ë¥¼ ì…ë ¥í•˜ì„¸ìš”');
   }
   try {
     await axios.post('/users', { name, age, married });
@@ -32,21 +32,32 @@ document.getElementById('user-form').addEventListener('submit', async (e) => {
   e.target.married.checked = false;
 });
 
-// »ç¿ëÀÚ ¼öÁ¤
+// ì‚¬ìš©ì ìˆ˜ì •
 async function editUser(id) {
-  const name = prompt('º¯°æÇÒ ÀÌ¸§À» ÀÔ·ÂÇÏ¼¼¿ä');
+  const name = prompt('ë³€ê²½í•  ì´ë¦„ì„ ì…ë ¥í•˜ì„¸ìš”');
   if (!name) {
-    return alert('ÀÌ¸§À» ¹İµå½Ã ÀÔ·ÂÇÏ¼Å¾ß ÇÕ´Ï´Ù');
+    return alert('ì´ë¦„ì„ ë°˜ë“œì‹œ ì…ë ¥í•˜ì…”ì•¼ í•©ë‹ˆë‹¤');
   }
   try {
-    await axios.put(`/users/${id}`, { name });
-    getUsers();
+    // MongoDBì˜ ObjectIdë¥¼ ë¬¸ìì—´ë¡œ ì²˜ë¦¬
+    const response = await axios.put(`/users/${id}`, { 
+      name: name,
+      age: document.querySelector(`tr[data-id="${id}"] td:nth-child(3)`).textContent,
+      married: document.querySelector(`tr[data-id="${id}"] td:nth-child(4)`).textContent === 'Yes'
+    });
+    
+    if (response.data) {
+      getUsers();  // ëª©ë¡ ìƒˆë¡œê³ ì¹¨
+    } else {
+      throw new Error('ìˆ˜ì • ì‹¤íŒ¨');
+    }
   } catch (err) {
-    console.error(err);
+    console.error('ìˆ˜ì • ì˜¤ë¥˜:', err);
+    alert('ì‚¬ìš©ì ìˆ˜ì •ì— ì‹¤íŒ¨í–ˆìŠµë‹ˆë‹¤.');
   }
 }
 
-// »ç¿ëÀÚ »èÁ¦
+// ì‚¬ìš©ì ì‚­ì œ
 async function deleteUser(id) {
   try {
     await axios.delete(`/users/${id}`);
@@ -56,7 +67,7 @@ async function deleteUser(id) {
   }
 }
 
-// »ç¿ëÀÚ ¸ñ·Ï ·Îµù
+// ì‚¬ìš©ì ëª©ë¡ ë¡œë”©
 async function getUsers() {
   try {
     const res = await axios.get('/users');
@@ -65,6 +76,8 @@ async function getUsers() {
     tbody.innerHTML = '';
     users.map(function (user) {
       const row = document.createElement('tr');
+      // data-id ì†ì„± ì¶”ê°€
+      row.setAttribute('data-id', user._id);
       row.innerHTML = `
         <td>${user._id}</td>
         <td>${user.name}</td>
@@ -82,5 +95,5 @@ async function getUsers() {
   }
 }
 
-// ÃÊ±â »ç¿ëÀÚ ¸ñ·Ï ·Îµù
+// ì´ˆê¸° ì‚¬ìš©ì ëª©ë¡ ë¡œë”©
 getUsers();

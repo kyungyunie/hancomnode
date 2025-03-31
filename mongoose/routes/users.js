@@ -62,4 +62,23 @@ router.route('/:id')
     }
   });
 
+// 사용자 수정 라우트
+router.put('/:id', async (req, res, next) => {
+    try {
+        const result = await User.findByIdAndUpdate(
+            req.params.id,
+            { name: req.body.name },
+            { new: true }
+        );
+        if (result) {
+            res.json(result);
+        } else {
+            res.status(404).json({ error: '사용자를 찾을 수 없습니다.' });
+        }
+    } catch (err) {
+        console.error(err);
+        next(err);
+    }
+});
+
 module.exports = router;
