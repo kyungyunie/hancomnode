@@ -1,4 +1,4 @@
-// ÄÜ¼Ö ÀÎÄÚµù ¼³Á¤
+// ì½˜ì†” ì¸ì½”ë”© ì„¤ì •
 process.stdout.setEncoding('utf8');
 if (process.platform === 'win32') {
   require('iconv-lite').encodingExists('utf8');
@@ -7,11 +7,11 @@ if (process.platform === 'win32') {
 const express = require('express');
 const path = require('path');
 const morgan = require('morgan');
-const pool = require('./models'); // index.jsÀÇ poolÀ» °¡Á®¿È
+const pool = require('./models'); // index.jsì˜ poolì„ ê°€ì ¸ì˜´
 const usersRouter = require('./routes/users');
 
 const app = express();
-const PORT = process.env.PORT || 3003;  // 3002¿¡¼­ ´Ù¸¥ Æ÷Æ®·Î º¯°æ
+const PORT = process.env.PORT || 3003;  // 3002ì—ì„œ ë‹¤ë¥¸ í¬íŠ¸ë¡œ ë³€ê²½
 
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
@@ -25,7 +25,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use('/users', usersRouter);
 
 app.use((req, res, next) => {
-  const error = new Error(`${req.method} ${req.url} ¶ó¿ìÅÍ°¡ ¾ø½À´Ï´Ù.`);
+  const error = new Error(`${req.method} ${req.url} ë¼ìš°í„°ê°€ ì—†ìŠµë‹ˆë‹¤.`);
   error.status = 404;
   next(error);
 });
@@ -38,7 +38,7 @@ app.use((err, req, res, next) => {
   });
 });
 
-// µ¥ÀÌÅÍº£ÀÌ½º ¿¬°á Å×½ºÆ®
+// ë°ì´í„°ë² ì´ìŠ¤ ì—°ê²° í…ŒìŠ¤íŠ¸
 pool.query('SELECT 1')
   .then(() => {
     console.log('Database connection successful');

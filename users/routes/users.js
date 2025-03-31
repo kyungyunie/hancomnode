@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-// »ç¿ëÀÚ ¸ñ·Ï Á¶È¸
+// ì‚¬ìš©ìž ëª©ë¡ ì¡°íšŒ
 router.get('/', async (req, res, next) => {
   try {
     const [users] = await req.app.get('pool').query('SELECT * FROM users');
@@ -11,12 +11,12 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-// »ç¿ëÀÚ µî·Ï ÆäÀÌÁö
+// ì‚¬ìš©ìž ë“±ë¡ íŽ˜ì´ì§€
 router.get('/reg', (req, res) => {
   res.render('user-register');
 });
 
-// »ç¿ëÀÚ µî·Ï
+// ì‚¬ìš©ìž ë“±ë¡
 router.post('/', async (req, res, next) => {
   try {
     const { name, age, married } = req.body;
@@ -30,7 +30,7 @@ router.post('/', async (req, res, next) => {
   }
 });
 
-// »ç¿ëÀÚ ¼öÁ¤ ÆäÀÌÁö
+// ì‚¬ìš©ìž ìˆ˜ì • íŽ˜ì´ì§€
 router.get('/edit/:id', async (req, res, next) => {
   try {
     const [users] = await req.app.get('pool').query(
@@ -43,7 +43,7 @@ router.get('/edit/:id', async (req, res, next) => {
   }
 });
 
-// »ç¿ëÀÚ ¼öÁ¤
+// ì‚¬ìš©ìž ìˆ˜ì •
 router.post('/edit/:id', async (req, res, next) => {
   try {
     const { name, age, married } = req.body;
@@ -57,7 +57,7 @@ router.post('/edit/:id', async (req, res, next) => {
   }
 });
 
-// »ç¿ëÀÚ »èÁ¦
+// ì‚¬ìš©ìž ì‚­ì œ
 router.get('/delete/:id', async (req, res, next) => {
   try {
     await req.app.get('pool').query('DELETE FROM users WHERE id = ?', [req.params.id]);
@@ -67,4 +67,4 @@ router.get('/delete/:id', async (req, res, next) => {
   }
 });
 
-module.exports = router; 
+module.exports = router;

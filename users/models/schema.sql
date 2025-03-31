@@ -1,7 +1,11 @@
-CREATE TABLE IF NOT EXISTS users (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(20) NOT NULL,
-  age INT NOT NULL,
-  married TINYINT(1) NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci; 
+-- users테이블 생성
+use nodejs;
+CREATE TABLE `users` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) NOT NULL,
+  `age` int	unsigned NOT NULL,
+  `married` tinyint NOT NULL,
+  `comment` text NOT NULL,
+  `created_at` datetime NULL DEFAULT now(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
