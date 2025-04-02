@@ -26,6 +26,7 @@ document.getElementById('user-form').addEventListener('submit', async (e) => {
     getUsers();
   } catch (err) {
     console.error(err);
+    alert('사용자 등록 실패: ' + (err.response?.data?.message || err.message));
   }
   e.target.username.value = '';
   e.target.age.value = '';

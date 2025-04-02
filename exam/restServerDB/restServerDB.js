@@ -26,7 +26,7 @@ async function createTable() {
             )
         `);
         connection.release();
-        console.log('테이블 생성 완료');
+        console.log('테이블 생성 완료되었습니다!!!');
     } catch (err) {
         console.error('테이블 생성 실패:', err);
     }

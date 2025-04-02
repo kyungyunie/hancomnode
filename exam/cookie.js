@@ -3,10 +3,10 @@ const http = require('http');
 http.createServer((req, res) => {
     console.log(req.url, req.headers.cookie);
     res.writeHead(200, { 
-        'Set-Cookie': ['mycookie=test', 'name=tommy']
+        'Set-Cookie': ['mycookie=jason', 'name=tommy']
     });
-    res.end('Hello Cookie');
-}).listen(8083, () => {
-    console.log('8083번 포트에서 서버 대기 중입니다.');
+    res.end('333333333 Cookie');
+}).listen(8085, () => {
+    console.log('8085번 포트에서 서버 대기 중입니다.');
 });
 

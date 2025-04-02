@@ -15,15 +15,28 @@ router.get('/', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   try {
+    const { name, age, married } = req.body;
+    
+    // Validate input
+    if (!name) {
+      return res.status(400).json({ message: '이름을 입력해주세요.' });
+    }
+    if (!age) {
+      return res.status(400).json({ message: '나이를 입력해주세요.' });
+    }
+    if (typeof married !== 'boolean') {
+      return res.status(400).json({ message: '결혼 여부를 선택해주세요.' });
+    }
+
     const user = await User.create({
-      name: req.body.name,
-      age: req.body.age,
-      married: req.body.married,
+      name,
+      age,
+      married,
     });
     res.status(201).json(user);
   } catch (err) {
     console.error(err);
-    next(err);
+    res.status(500).json({ message: '서버 오류가 발생했습니다.' });
   }
 });
 
