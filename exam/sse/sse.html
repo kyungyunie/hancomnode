@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>SSE 클라이언트 예제</title>
+</head>
+<body>
+  <h1>서버에서 전송된 이벤트</h1>
+  <div id="events"></div>
+
+  <script>
+    const eventsContainer = document.getElementById('events');
+    
+    // EventSource 객체 생성
+    const eventSource = new EventSource('/events');
+    
+    // 일반 메시지 수신
+    eventSource.onmessage = function(event) {
+      const data = JSON.parse(event.data);
+      addEvent('메시지', data);
+    };
+    
+    // 'update' 이벤트 수신
+    eventSource.addEventListener('update', function(event) {
+      const data = JSON.parse(event.data);
+      addEvent('업데이트', data);
+    });
+    
+    // 연결 열림
+    eventSource.onopen = function() {
+      addEvent('시스템', { message: '서버와 연결되었습니다' });
+    };
+    
+    // 오류 처리
+    eventSource.onerror = function() {
+      addEvent('오류', { message: '연결 오류, 재연결 중...' });
+    };
+    
+    // 이벤트를 화면에 표시하는 함수
+    function addEvent(type, data) {
+      const element = document.createElement('div');
+      element.innerHTML = `<strong>${type}:</strong> ${JSON.stringify(data)}`;
+      eventsContainer.appendChild(element);
+    }
+  </script>
+</body>
+</html>
