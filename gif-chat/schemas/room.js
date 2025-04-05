@@ -21,6 +21,14 @@ const roomSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+  deleted: {
+    type: Boolean,
+    default: false
+  },
+  deletedAt: {
+    type: Date,
+    default: null
+  }
 });
 
 module.exports = mongoose.model('Room', roomSchema);

@@ -19,7 +19,7 @@
         <td>{{room.title}}</td>
         <td>{{'비밀방' if room.password else '공개방'}}</td>
         <td>{{room.max}}</td>
-        <td style="color: {{room.owner}}">{{room.owner}}</td>
+        <td>{{room.owner}}</td>
         <td>
           <button
             data-password="{{'true' if room.password else 'false'}}"
@@ -37,11 +37,11 @@
 </fieldset>
 <script src="/socket.io/socket.io.js"></script>
 <script>
-  const socket = io.connect('http://localhost:8005/room', { // 네임스페이스
-    path: '/socket.io',
+  const socket = io.connect('/room', {
+    path: '/socket.io'
   });
 
-  socket.on('newRoom', function (data) { // 새 방 이벤트 시 새 방 생성
+  socket.on('newRoom', function (data) {
     const tr = document.createElement('tr');
     let td = document.createElement('td');
     td.textContent = data.title;
@@ -53,7 +53,6 @@
     td.textContent = data.max;
     tr.appendChild(td);
     td = document.createElement('td');
-    td.style.color = data.owner;
     td.textContent = data.owner;
     tr.appendChild(td);
     td = document.createElement('td');
@@ -65,10 +64,10 @@
     td.appendChild(button);
     tr.appendChild(td);
     tr.dataset.id = data._id;
-    document.querySelector('table tbody').appendChild(tr); // 화면에 추가
+    document.querySelector('table tbody').appendChild(tr);
   });
 
-  socket.on('removeRoom', function (data) { // 방 제거 이벤트 시 id가 일치하는 방 제거
+  socket.on('removeRoom', function (data) {
     document.querySelectorAll('tbody tr').forEach(function (tr) {
       if (tr.dataset.id === data) {
         tr.parentNode.removeChild(tr);
@@ -76,12 +75,18 @@
     });
   });
 
-  function addBtnEvent(e) { // 방 입장 클릭 시
+  function addBtnEvent(e) {
+    const username = prompt('사용자 이름을 입력하세요');
+    if (!username || username.trim().length === 0) {
+      alert('사용자 이름을 입력해주세요');
+      return;
+    }
+    
     if (e.target.dataset.password === 'true') {
       const password = prompt('비밀번호를 입력하세요');
-      location.href = '/room/' + e.target.dataset.id + '?password=' + password;
+      location.href = '/room/' + e.target.dataset.id + '?password=' + password + '&username=' + encodeURIComponent(username);
     } else {
-      location.href = '/room/' + e.target.dataset.id;
+      location.href = '/room/' + e.target.dataset.id + '?username=' + encodeURIComponent(username);
     }
   }
 

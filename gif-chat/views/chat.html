@@ -8,7 +8,7 @@
     <div id="chat-list">
       {% for chat in chats %}
         {% if chat.user === user %}
-          <div class="mine" style="color: {{chat.user}}">
+          <div class="mine" style="color: #000000">
             <div>{{chat.user}}</div>
             {% if chat.gif %}}
               <img src="/gif/{{chat.gif}}">
@@ -21,7 +21,7 @@
             <div>{{chat.chat}}</div>
           </div>
         {% else %}
-          <div class="other" style="color: {{chat.user}}">
+          <div class="other" style="color: #000000">
             <div>{{chat.user}}</div>
             {% if chat.gif %}
               <img src="/gif/{{chat.gif}}">
@@ -42,8 +42,8 @@
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script src="/socket.io/socket.io.js"></script>
   <script>
-    const socket = io.connect('http://localhost:8005/chat', {
-      path: '/socket.io',
+    const socket = io.connect('/chat', {
+      path: '/socket.io'
     });
     socket.emit('join', new URL(location).pathname.split('/').at(-1));
     socket.on('join', function (data) {
@@ -81,7 +81,6 @@
         gif.src = '/gif/' + data.gif;
         div.appendChild(gif);
       }
-      div.style.color = data.user;
       document.querySelector('#chat-list').appendChild(div);
     });
     document.querySelector('#chat-form').addEventListener('submit', function (e) {
@@ -97,6 +96,18 @@
             console.error(err);
           });
       }
+    });
+    document.querySelector('#gif').addEventListener('change', function (e) {
+      console.log(e.target.files);
+      const formData = new FormData();
+      formData.append('gif', e.target.files[0]);
+      axios.post('/room/{{room._id}}/gif', formData)
+        .then(() => {
+          e.target.file = null;
+        })
+        .catch((err) => {
+          console.error(err);
+        });
     });
   </script>
 {% endblock %}
