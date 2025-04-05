@@ -18,8 +18,7 @@ app.get('/events', (req, res) => {
   // 1초마다 현재 시간 전송
   const intervalId = setInterval(() => {
     const data = {
-      time: new Date().toLocaleTimeString(),
-      value: Math.random() * 100
+      time: new Date().toLocaleTimeString()
     };
     
     // 이벤트 타입과 함께 데이터 전송
