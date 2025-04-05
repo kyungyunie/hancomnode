@@ -87,7 +87,7 @@ function broadcastUserCount() {
 }
 
 // 서버 시작
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4001;
 server.listen(PORT, () => {
   console.log(`서버가 포트 ${PORT}에서 실행 중입니다`);
 });
