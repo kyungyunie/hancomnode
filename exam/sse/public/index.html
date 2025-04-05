@@ -2,6 +2,30 @@
 <html>
 <head>
   <title>SSE 클라이언트 예제</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    #events {
+      border: 1px solid #ddd;
+      padding: 10px;
+      margin-top: 20px;
+      height: 400px;
+      overflow-y: auto;
+    }
+    .event-item {
+      margin: 5px 0;
+      padding: 5px;
+      border-bottom: 1px solid #eee;
+    }
+    .event-type {
+      color: #2196F3;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
   <h1>서버에서 전송된 이벤트</h1>
@@ -38,9 +62,12 @@
     // 이벤트를 화면에 표시하는 함수
     function addEvent(type, data) {
       const element = document.createElement('div');
-      element.innerHTML = `<strong>${type}:</strong> ${JSON.stringify(data)}`;
+      element.className = 'event-item';
+      element.innerHTML = `<span class="event-type">${type}:</span> ${JSON.stringify(data)}`;
       eventsContainer.appendChild(element);
+      // 스크롤을 최하단으로 이동
+      eventsContainer.scrollTop = eventsContainer.scrollHeight;
     }
   </script>
 </body>
-</html>
+</html> 
