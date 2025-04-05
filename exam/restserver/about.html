@@ -70,15 +70,41 @@
         
         /* 히어로 섹션 */
         .hero {
-            height: 100vh;
+            min-height: 80vh;
             display: flex;
             align-items: center;
             background-color: #f8f9fa;
             padding-top: 80px;
+            padding-bottom: 40px;
         }
         
         .hero-content {
-            max-width: 600px;
+            max-width: 1200px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 50px;
+            margin: 0 auto;
+        }
+
+        .hero-text {
+            flex: 1;
+            max-width: 800px;
+        }
+        
+        .hero-image {
+            flex-shrink: 0;
+            width: 300px;
+            height: 300px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
         
         .hero h1 {
@@ -110,7 +136,7 @@
         
         /* 기술 스택 섹션 */
         .skills {
-            padding: 100px 0;
+            padding: 80px 0;
             background-color: #fff;
         }
         
@@ -149,6 +175,11 @@
         
         .skill-card h3 {
             font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .skill-card p {
+            color: #666;
             margin-bottom: 15px;
         }
         
@@ -242,17 +273,61 @@
         }
         
         /* 반응형 디자인 */
+        @media (max-width: 1024px) {
+            .hero-content {
+                max-width: 90%;
+                gap: 30px;
+            }
+
+            .hero-image {
+                width: 250px;
+                height: 250px;
+            }
+        }
+
         @media (max-width: 768px) {
+            .hero {
+                padding-top: 100px;
+            }
+
+            .hero-content {
+                flex-direction: column-reverse;
+                text-align: center;
+                gap: 30px;
+            }
+
+            .hero-text {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .hero-image {
+                width: 200px;
+                height: 200px;
+            }
+
             .hero h1 {
                 font-size: 2.5rem;
             }
-            
-            .projects-container {
-                grid-template-columns: 1fr;
+
+            .hero p {
+                font-size: 1.1rem;
             }
-            
-            .nav-links {
-                display: none;
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .hero-image {
+                width: 180px;
+                height: 180px;
             }
         }
 
@@ -269,6 +344,71 @@
             color: white;
             font-weight: bold;
         }
+
+        /* 햄버거 메뉴 스타일 */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 21px;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 100%;
+            height: 3px;
+            background-color: #333;
+            transition: all 0.3s ease;
+        }
+
+        /* 햄버거 메뉴 활성화 상태 */
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(6px, 6px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(6px, -6px);
+        }
+
+        @media (max-width: 768px) {
+            .hamburger {
+                display: flex;
+            }
+
+            .nav-links {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100vh;
+                background-color: rgba(255, 255, 255, 0.95);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 30px;
+                z-index: 1000;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links li {
+                margin: 0;
+            }
+
+            .nav-links a {
+                font-size: 1.2rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -277,6 +417,11 @@
         <div class="container">
             <nav>
                 <div class="logo">TommyKim</div>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
                 <ul class="nav-links">
                     <li><a href="#home">홈</a></li>
                     <li><a href="#skills">기술 스택</a></li>
@@ -291,9 +436,15 @@
     <section class="hero" id="home">
         <div class="container">
             <div class="hero-content">
-                <h1>안녕하세요,<br>TommyKim입니다</h1>
-                <p>프론트엔드와 백엔드를 아우르는 풀스택 개발자로서 창의적이고 사용자 친화적인 웹사이트를 개발합니다. 새로운 기술을 배우고 도전하는 것을 좋아합니다.</p>
-                <a href="#projects" class="btn">포트폴리오 보기</a>
+                <div class="hero-text">
+                    <h1>안녕하세요,<br>TommyKim입니다</h1>
+                    <p>프론트엔드와 백엔드를 아우르는 풀스택 개발자로서 창의적이고 사용자 친화적인 웹사이트를 개발합니다. 새로운 기술을 배우고 도전하는 것을 좋아합니다.
+                    <p>혼자서는 작은 한방울지만 우리가 함께 모이면 바다가 될 수 있습니다.</p>
+                    <a href="#projects" class="btn">포트폴리오 보기</a>
+                </div>
+                <div class="hero-image">
+                    <img src="./profile.png" alt="TommyKim 프로필">
+                </div>
             </div>
         </div>
     </section>
@@ -311,7 +462,7 @@
                 <div class="skill-card">
                     <div class="icon-placeholder">JS</div>
                     <h3>백엔드</h3>
-                    <p>Node.js, JAVA, J2EE, SPRING, RESTful API</p>
+                    <p>Node.js, ASP.NET, JAVA, J2EE, SPRING, RESTful API</p>
                 </div>
                 <div class="skill-card">
                     <div class="icon-placeholder">DB</div>
@@ -321,7 +472,7 @@
                 <div class="skill-card">
                     <div class="icon-placeholder">Git</div>
                     <h3>개발 도구</h3>
-                    <p>Git, GitHub, VS Code, GCP, AWS</p>
+                    <p>Git, GitHub, VS Code, GCP, AWS, JIRA</p>
                 </div>
             </div>
         </div>
@@ -333,7 +484,7 @@
             <h2 class="section-title">프로젝트</h2>
             <div class="projects-container">
                 <div class="project-card">
-                    <div class="project-img" style="background-color: #e74c3c;"></div>
+                    <div class="project-img" style="background-color: #3498db;"></div>
                     <div class="project-content">
                         <h3>이름관리프로그램</h3>
                         <p>ec2,rds,Node.js를 사용한 사용자이름관리 플랫폼.</p>
@@ -344,7 +495,7 @@
                     </div>
                 </div>
                 <div class="project-card">
-                    <div class="project-img" style="background-color: #2ecc71;"></div>
+                    <div class="project-img" style="background-color: #e74c3c;"></div>
                     <div class="project-content">
                         <h3>회원관리플랫폼</h3>
                         <p>ec2,rds,Node.js를 사용한 회원관리 플랫폼
@@ -354,7 +505,50 @@
                         </div>
                     </div>
                 </div>
-                
+                <div class="project-card">
+                    <div class="project-img" style="background-color: #2ecc71;"></div>
+                    <div class="project-content">
+                        <h3>템플릿엔진사용-사용자CRUD</h3>
+                        <p>PUG와 라우터를 활용한 플랫폼
+                        <div class="project-links">
+                            <a href="http://3.35.233.100:3003/users/">Live Demo</a>
+                            <a href="https://github.com/tommykim/hancomnode/tree/main/users">GitHub</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-img" style="background-color: #9b59b6;"></div>
+                    <div class="project-content">
+                        <h3>시퀄라이저를 활용한 회원관리플랫폼</h3>
+                        <p>시퀄라이저를 사용한 회원관리 플랫폼
+                        <div class="project-links">
+                            <a href="http://3.35.233.100:3001/">Live Demo</a>
+                            <a href="https://github.com/tommykim/hancomnode/tree/main/sequelize">GitHub</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-img" style="background-color: #f39c12;"></div>
+                    <div class="project-content">
+                        <h3>몽고DB연동 회원관리</h3>
+                        <p>MongoDB와 node.js를 활용한 회원관리</p>
+                        <div class="project-links">
+                            <a href="http://3.35.233.100:3002/">Live Demo</a>
+                            <a href="https://github.com/tommykim/hancomnode/tree/main/mongoose">GitHub</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-img" style="background-color: #1abc9c;"></div>
+                    <div class="project-content">
+                        <h3>RESTFUL API SERVER</h3>
+                        <p>SWAGGER UI를 활용한 API SERVER.</p>
+                        <div class="project-links">
+                            <a href="http://3.35.233.100:4000/api-docs">Live Demo</a>
+                            <a href="https://github.com/tommykim/hancomnode/blob/main/exam/restserver/single.js">GitHub</a>
+                        </div>
+                    </div>
+                </div>                                
             </div>
         </div>
     </section>
@@ -364,11 +558,10 @@
         <div class="container">
             <h2 class="section-title">연락처</h2>
             <p>새로운 프로젝트나 협업 기회에 관심이 있으시다면 언제든지 연락해 주세요. 이메일이나 소셜 미디어를 통해 연락 가능합니다.</p>
-            <a href="mailto:email@example.com" class="btn">이메일 보내기</a>
+            <a href="mailto:tommy@m95.co.kr" class="btn">이메일 보내기</a>
             <div class="social-links">
-                <a href="#">GitHub</a>
-                <a href="#">LinkedIn</a>
-                <a href="#">Twitter</a>
+                <a href="https://github.com/tommykim">GitHub</a>
+                <a href="https://x.com/tommynara">Twitter</a>
             </div>
         </div>
     </section>
@@ -379,5 +572,28 @@
             <p>&copy; 2025 TommyKim. All Rights Reserved.</p>
         </div>
     </footer>
+
+    <!-- JavaScript 추가 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburger = document.querySelector('.hamburger');
+            const navLinks = document.querySelector('.nav-links');
+            const navLinksItems = document.querySelectorAll('.nav-links a');
+
+            // 햄버거 메뉴 클릭 이벤트
+            hamburger.addEventListener('click', function() {
+                hamburger.classList.toggle('active');
+                navLinks.classList.toggle('active');
+            });
+
+            // 메뉴 항목 클릭시 메뉴 닫기
+            navLinksItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    hamburger.classList.remove('active');
+                    navLinks.classList.remove('active');
+                });
+            });
+        });
+    </script>
 </body>
 </html>
