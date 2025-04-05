@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebSocket 채팅</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    #chat-container {
+      display: flex;
+      flex-direction: column;
+      height: 80vh;
+    }
+    #messages {
+      flex: 1;
+      overflow-y: auto;
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-bottom: 10px;
+      background-color: #f9f9f9;
+    }
+    .message {
+      margin-bottom: 10px;
+      padding: 8px;
+      border-radius: 5px;
+    }
+    .chat {
+      background-color: #e6f7ff;
+    }
+    .system {
+      background-color: #f0f0f0;
+      font-style: italic;
+    }
+    .message-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 5px;
+      font-size: 0.8em;
+      color: #666;
+    }
+    .username {
+      font-weight: bold;
+      color: #0066cc;
+    }
+    #user-count {
+      text-align: right;
+      margin-bottom: 10px;
+      font-size: 0.9em;
+      color: #666;
+    }
+    #input-container {
+      display: flex;
+      gap: 10px;
+    }
+    #username {
+      width: 150px;
+    }
+    #message {
+      flex: 1;
+    }
+    button {
+      background-color: #0066cc;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    button:hover {
+      background-color: #004d99;
+    }
+  </style>
+</head>
+<body>
+  <h1>실시간 WebSocket 채팅</h1>
+  <div id="user-count">접속자 수: 0</div>
+  
+  <div id="chat-container">
+    <div id="messages"></div>
+    
+    <div id="input-container">
+      <input type="text" id="username" placeholder="닉네임">
+      <input type="text" id="message" placeholder="메시지를 입력하세요..." autocomplete="off">
+      <button id="send">전송</button>
+    </div>
+  </div>
+
+  <script>
+    const messagesContainer = document.getElementById('messages');
+    const userCountDisplay = document.getElementById('user-count');
+    const usernameInput = document.getElementById('username');
+    const messageInput = document.getElementById('message');
+    const sendButton = document.getElementById('send');
+    
+    // WebSocket 연결
+    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    const wsUrl = `${protocol}//${window.location.host}`;
+    let socket;
+    
+    function connectWebSocket() {
+      socket = new WebSocket(wsUrl);
+      
+      // 연결 열림
+      socket.onopen = () => {
+        addMessage({
+          type: 'system',
+          message: '서버에 연결되었습니다.',
+          timestamp: new Date().toISOString()
+        });
+      };
+      
+      // 메시지 수신
+      socket.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          
+          if (data.type === 'userCount') {
+            userCountDisplay.textContent = `접속자 수: ${data.count}`;
+          } else {
+            addMessage(data);
+          }
+        } catch (e) {
+          console.error('메시지 파싱 오류:', e);
+        }
+      };
+      
+      // 연결 종료
+      socket.onclose = () => {
+        addMessage({
+          type: 'system',
+          message: '서버와 연결이 끊어졌습니다. 재연결 중...',
+          timestamp: new Date().toISOString()
+        });
+        
+        // 1초 후 재연결 시도
+        setTimeout(connectWebSocket, 1000);
+      };
+      
+      // 오류 처리
+      socket.onerror = (error) => {
+        console.error('WebSocket 오류:', error);
+        addMessage({
+          type: 'system',
+          message: '연결 오류가 발생했습니다.',
+          timestamp: new Date().toISOString()
+        });
+      };
+    }
+    
+    // 메시지 전송
+    function sendMessage() {
+      if (socket && socket.readyState === WebSocket.OPEN) {
+        const username = usernameInput.value.trim() || '익명';
+        const message = messageInput.value.trim();
+        
+        if (message) {
+          socket.send(JSON.stringify({
+            username,
+            message
+          }));
+          
+          messageInput.value = '';
+        }
+      }
+    }
+    
+    // 메시지 표시
+    function addMessage(data) {
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `message ${data.type}`;
+      
+      const headerDiv = document.createElement('div');
+      headerDiv.className = 'message-header';
+      
+      // 시간 형식 변환
+      const timestamp = new Date(data.timestamp);
+      const timeStr = timestamp.toLocaleTimeString();
+      
+      if (data.type === 'chat') {
+        const usernameSpan = document.createElement('span');
+        usernameSpan.className = 'username';
+        usernameSpan.textContent = data.username;
+        headerDiv.appendChild(usernameSpan);
+      }
+      
+      const timeSpan = document.createElement('span');
+      timeSpan.textContent = timeStr;
+      headerDiv.appendChild(timeSpan);
+      
+      const contentDiv = document.createElement('div');
+      contentDiv.textContent = data.message;
+      
+      messageDiv.appendChild(headerDiv);
+      messageDiv.appendChild(contentDiv);
+      
+      messagesContainer.appendChild(messageDiv);
+      
+      // 스크롤을 최신 메시지로 이동
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+    
+    // 이벤트 리스너
+    sendButton.addEventListener('click', sendMessage);
+    
+    messageInput.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') {
+        sendMessage();
+        event.preventDefault();
+      }
+    });
+    
+    // 초기 연결
+    connectWebSocket();
+  </script>
+</body>
+</html>
