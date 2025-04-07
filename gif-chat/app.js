@@ -37,7 +37,7 @@ const uploadsDir = path.join(__dirname, 'uploads');
 console.log('uploads 디렉토리 경로:', uploadsDir);  // 경로 로깅
 app.use('/gif', express.static(uploadsDir));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: false }));  // 폼 데이터 파싱을 위한 미들웨어 추가
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(sessionMiddleware);
 

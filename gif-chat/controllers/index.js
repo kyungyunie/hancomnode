@@ -18,22 +18,39 @@ exports.renderRoom = (req, res) => {
 
 exports.createRoom = async (req, res, next) => {
   try {
+    console.log('방 생성 요청 데이터:', {
+      title: req.body.title,
+      max: req.body.max,
+      owner: req.body.owner,
+      password: req.body.password,
+    });
+    
+    if (!req.body.title || !req.body.owner) {
+      throw new Error('방 제목과 방장 이름은 필수 입력값입니다.');
+    }
+
     const newRoom = await Room.create({
       title: req.body.title,
       max: req.body.max,
-      owner: req.session.color,
+      owner: req.body.owner,
       password: req.body.password,
     });
+    
+    console.log('생성된 방 정보:', newRoom);
+    
     const io = req.app.get('io');
     io.of('/room').emit('newRoom', newRoom);
+    
+    req.session.color = req.body.owner;
+    
     if (req.body.password) { // 비밀번호가 있는 방이면
-      res.redirect(`/room/${newRoom._id}?password=${req.body.password}`);
+      res.redirect(`/room/${newRoom._id}?password=${req.body.password}&username=${encodeURIComponent(req.body.owner)}`);
     } else {
-      res.redirect(`/room/${newRoom._id}`);
+      res.redirect(`/room/${newRoom._id}?username=${encodeURIComponent(req.body.owner)}`);
     }
   } catch (error) {
-    console.error(error);
-    next(error);
+    console.error('방 생성 오류:', error);
+    return res.redirect('/room?error=' + encodeURIComponent(error.message));
   }
 };
 
